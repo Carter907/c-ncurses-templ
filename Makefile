@@ -52,7 +52,7 @@ format: $(SRC_DIR)/*
 	clang-format -i $^
 
 # remove lib and build dirs
-clean: $(BUILD_DIR) $(LIB_DIR)
+clean: $(BUILD_DIR)
 	rm -rf $^
 
 # run debugger
