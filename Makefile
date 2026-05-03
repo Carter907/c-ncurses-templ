@@ -1,0 +1,60 @@
+SHELL=/usr/bin/bash
+
+CC = gcc
+CD = gdb
+
+PROG_NAME = app
+
+# sources
+CLIENT_SRC = main.c
+TEST_SOURCES = test.c
+
+VER = c23
+
+# dirs
+LIB_DIR = ./lib
+SRC_DIR = ./src
+BUILD_DIR = ./target
+TEST_DIR = ./tests
+
+# flags
+BASE_CFLAGS = -std=$(VER) -g -Wall -Werror -Wconversion
+CLIENT_CFLAGS= $(BASE_FLAGS) -fanalyzer -fsanitize=address,undefined,leak -fsanitize-trap=undefined
+CFLAGS = $(BASE_CFLAGS)
+
+# other libs used by client
+
+LIBS = -lncurses
+
+# libs used by testing framework
+
+TEST_LIBS = -lcunit
+
+
+run: $(BUILD_DIR)/$(PROG_NAME)
+	$(BUILD_DIR)/$(PROG_NAME)
+
+# build client app
+build: $(SRC_DIR)/$(CLIENT_SRC)
+	@echo building client...
+	mkdir -p $(BUILD_DIR)
+	$(CC) -o $(PROG_NAME) $(CLIENT_CFLAGS) $(SRC_DIR)/$(CLIENT_SRC) $(LIBS)
+	mv $(PROG_NAME) $(BUILD_DIR) 
+
+# run tests
+test: $(TEST_DIR)/$(TEST_SOURCES)
+	mkdir -p $(BUILD_DIR)/tests
+	$(CC) -I$(SRC_DIR) -o $(PROG_NAME)_test $(CFLAGS) $(SRC_DIR)/$(SOURCES) $(TEST_DIR)/$(TEST_SOURCES) $(TEST_LIBS) 
+	mv $(PROG_NAME)_test $(BUILD_DIR)/tests
+	$(BUILD_DIR)/tests/$(PROG_NAME)_test
+
+format: $(SRC_DIR)/*
+	clang-format -i $^
+
+# remove lib and build dirs
+clean: $(BUILD_DIR) $(LIB_DIR)
+	rm -rf $^
+
+# run debugger
+debug: build
+	$(CD) $(BUILD_DIR)/$(PROG_NAME)
