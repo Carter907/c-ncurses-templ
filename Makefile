@@ -24,7 +24,7 @@ CFLAGS = $(BASE_CFLAGS)
 
 # other libs used by client
 
-LIBS = -lncurses
+LIBS = -lncurses -lm
 
 # libs used by testing framework
 
@@ -38,7 +38,7 @@ run: $(BUILD_DIR)/$(PROG_NAME)
 build: $(SRC_DIR)/$(CLIENT_SRC)
 	@echo building client...
 	mkdir -p $(BUILD_DIR)
-	$(CC) -o $(PROG_NAME) $(CLIENT_CFLAGS) $(SRC_DIR)/$(CLIENT_SRC) $(LIBS)
+	$(CC) -o $(PROG_NAME) $(CLIENT_CFLAGS) $(wildcard $(SRC_DIR)/*.c)  $(LIBS)
 	mv $(PROG_NAME) $(BUILD_DIR) 
 
 # run tests
