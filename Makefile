@@ -19,7 +19,7 @@ TEST_DIR = ./tests
 
 # flags
 BASE_CFLAGS = -std=$(VER) -g -Wall -Werror -Wconversion
-CLIENT_CFLAGS= $(BASE_FLAGS) -fanalyzer -fsanitize=address,undefined,leak -fsanitize-trap=undefined
+CLIENT_CFLAGS= $(BASE_CFLAGS) -fanalyzer -fsanitize=address,undefined,leak -fsanitize-trap=undefined
 CFLAGS = $(BASE_CFLAGS)
 
 # other libs used by client
